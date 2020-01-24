@@ -158,7 +158,7 @@ void getSegments(const char* path, struct segment segments[], int* numberOfSegme
     *numberOfSegments = n;
 }
 
-int main()
+int part1()
 {
     int length1;
     struct segment segments1[MAX_SEGMENTS];
@@ -190,7 +190,20 @@ int main()
         }
     }
 
-    printf("part 1: %d\n", mindist);
+    return mindist;
+}
+
+int part2()
+{
+    int length1;
+    struct segment segments1[MAX_SEGMENTS];
+    memset(segments1, 0, sizeof(segments1));
+    getSegments(path1, segments1, &length1);
+
+    int length2;
+    struct segment segments2[MAX_SEGMENTS];
+    memset(segments2, 0, sizeof(segments2));
+    getSegments(path2, segments2, &length2);
 
     int minsteps = INT_MAX;
 
@@ -219,7 +232,13 @@ int main()
         steps1 += getLength(s1);
     }
 
-    printf("part 2: %d\n", minsteps);
+    return minsteps;
+}
+
+int main()
+{
+    printf("part 1: %d\n", part1());
+    printf("part 2: %d\n", part2());
 
     return 0;
 }

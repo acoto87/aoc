@@ -27,9 +27,6 @@ int validPart1(int digits[], int min, int max)
                 digits[5];
 
         valid = x >= min && x <= max;
-
-        if (valid)
-            printf("%d\n", x);
     }
 
     return valid;
@@ -67,15 +64,33 @@ int validPart2(int digits[], int min, int max)
     return valid;
 }
 
-int comb2(int min, int max, int digits[], int index, int startDigit)
+int part1Comb(int min, int max, int digits[], int index, int startDigit)
 {
     if (index >= MAX_DIGITS)
     {
-        // if (validPart1(digits, min, max))
-        // {
-        //     return 1;
-        // }
+        if (validPart1(digits, min, max))
+        {
+            return 1;
+        }
 
+        return 0;
+    }
+
+    int n = 0;
+
+    for (int s = startDigit; s < 10; s++)
+    {
+        digits[index] = s;
+        n += part1Comb(min, max, digits, index + 1, s);
+    }
+
+    return n;
+}
+
+int part2Comb(int min, int max, int digits[], int index, int startDigit)
+{
+    if (index >= MAX_DIGITS)
+    {
         if (validPart2(digits, min, max))
         {
             return 1;
@@ -89,22 +104,31 @@ int comb2(int min, int max, int digits[], int index, int startDigit)
     for (int s = startDigit; s < 10; s++)
     {
         digits[index] = s;
-        n += comb2(min, max, digits, index + 1, s);
+        n += part2Comb(min, max, digits, index + 1, s);
     }
 
     return n;
 }
 
-int comb1(int min, int max)
+int part1(int min, int max)
 {
     int digits[MAX_DIGITS];
     memset(digits, 0, sizeof(digits));
-    int n = comb2(min, max, digits, 0, 1);
+    int n = part1Comb(min, max, digits, 0, 1);
+    return n;
+}
+
+int part2(int min, int max)
+{
+    int digits[MAX_DIGITS];
+    memset(digits, 0, sizeof(digits));
+    int n = part2Comb(min, max, digits, 0, 1);
     return n;
 }
 
 int main()
 {
-    printf("%d\n", comb1(178416, 676461));
+    printf("part 1: %d\n", part1(178416, 676461));
+    printf("part 2: %d\n", part2(178416, 676461));
     return 0;
 }

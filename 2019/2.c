@@ -36,29 +36,35 @@ const int opcodes[] =
     1,107,2,111,
     1,111,5,0,
     99,
-    2,14,0,0 };
+    2,14,0,0
+};
 
 void runProgram(int* memory, int length)
 {
     for (int i = 0; i < length; i += 4)
     {
-        if (memory[i] == 99)
-        {
+        int opcode = memory[i];
+        if (opcode == 99)
             break;
-        }
 
-        if (memory[i] == 1)
+        if (opcode == 1)
         {
-            memory[memory[i + 3]] = memory[memory[i + 1]] + memory[memory[i + 2]];
+            int addr1 = memory[i + 1];
+            int addr2 = memory[i + 2];
+            int addr3 = memory[i + 3];
+            memory[addr3] = memory[addr1] + memory[addr2];
         }
-        else if (memory[i] == 2)
+        else if (opcode == 2)
         {
-            memory[memory[i + 3]] = memory[memory[i + 1]] * memory[memory[i + 2]];
+            int addr1 = memory[i + 1];
+            int addr2 = memory[i + 2];
+            int addr3 = memory[i + 3];
+            memory[addr3] = memory[addr1] * memory[addr2];
         }
     }
 }
 
-int main()
+int part1()
 {
     int length = arrayLength(opcodes);
 
@@ -68,14 +74,22 @@ int main()
     memory[1] = 12;
     memory[2] = 2;
     runProgram(memory, length);
-    printf("part 1: %d\n", memory[0]);
 
-    int n = 0, v = 0;
-    int found = 0;
+    int result = memory[0];
+    free(memory);
+    return result;
+}
 
-    for (n = 0; n < 100; n++)
+int part2()
+{
+    int length = arrayLength(opcodes);
+
+    int* memory = (int*)malloc(length * sizeof(int));
+    memcpy(memory, opcodes, length * sizeof(int));
+
+    for (int n = 0; n < 100; n++)
     {
-        for (v = 0; v < 100; v++)
+        for (int v = 0; v < 100; v++)
         {
             memcpy(memory, opcodes, length * sizeof(int));
 
@@ -83,18 +97,21 @@ int main()
             memory[2] = v;
             runProgram(memory, length);
 
-            found = (memory[0] == 19690720);
-            if (found)
-                break;
+            if (memory[0] == 19690720)
+            {
+                free(memory);
+                return 100 * n + v;
+            }
         }
-
-        if (found)
-            break;
     }
 
-    printf("part 2: %d\n", 100 * n + v);
-
     free(memory);
+    return 0;
+}
 
+int main()
+{
+    printf("part 1: %d\n", part1());
+    printf("part 2: %d\n", part2());
     return 0;
 }
