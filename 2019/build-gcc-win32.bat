@@ -22,5 +22,6 @@ gcc %CommonCompilerFlags% ..\3.c -o 3.exe
 gcc %CommonCompilerFlags% ..\4.c -o 4.exe
 gcc %CommonCompilerFlags% ..\5.c -o 5.exe
 gcc %CommonCompilerFlags% ..\6.c -o 6.exe
+gcc %CommonCompilerFlags% ..\7.c -o 7.exe
 
 POPD
